@@ -1,0 +1,16 @@
+{
+  "twilio": {
+    "live": {
+      "account_sid": "ABC",
+      "auth_token": "123"
+    },
+    "test": {
+      "account_sid": "DEF",
+      "auth_token": "456"
+    }
+  },
+  "phoneNumbers": {
+    "account": "+18001234567",
+    "self": "+14154548888"
+  }
+}
