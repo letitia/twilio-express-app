@@ -1,0 +1,22 @@
+{
+  "name": "twilio-express-app",
+  "version": "1.0.0",
+  "description": "An Express app to create conferences in Twilio",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Letitia Lew",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "ngrok": "^2.2.17",
+    "sequelize": "^4.4.3",
+    "twilio": "^3.6.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
