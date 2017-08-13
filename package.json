@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "ejs": "^2.5.7",
     "express": "^4.15.4",
     "ngrok": "^2.2.17",
     "sequelize": "^4.4.3",

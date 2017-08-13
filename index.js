@@ -10,18 +10,26 @@ const client = new twilio(config.twilio.live.accountSid, config.twilio.live.auth
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  res.send('Hello world');
+  client.conferences.list((err, conferences) => {
+    conferences.forEach((conference) => {
+      console.log(conference)
+    });
+    res.render('index', { conferences });
+  });
 });
 
 app.post('/conference', (req, res) => {
   console.log('Posted to /conference!')
   const phoneNumber = req.body.From;
-  const input = req.body.RecordingUrl || req.body.Digits;
   const twiml = new VoiceResponse();
   const dial = twiml.dial();
-  dial.conference('My Conference Room 01');
+  const friendlyName = `My Conference Room ${Math.ceil(Math.random() * 100)}`;
+
+  dial.conference(friendlyName);
+
   res.type('text/xml');
   res.send(twiml.toString());
 });

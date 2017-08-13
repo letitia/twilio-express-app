@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head></head>
+<body>
+  <% if (conferences) { %>
+    <h2>Conferences</h2>
+    <table>
+      <tr>
+        <th />
+        <th>Friendly Name</th>
+        <th>Conference SID</th>
+        <th>Date Created</th>
+        <th>Status</th>
+      </tr>
+      <% conferences.forEach(function (conference, i) {  %>
+        <tr>
+          <td><%= i+1 %>.</td>
+          <td><%= conference.friendlyName %></td>
+          <td><%= conference.sid %></td>
+          <td><%= conference.dateCreated %></td>
+          <td><%= conference.status %></td>
+        </tr>
+      <% }) %>
+  <% } %>
+</body>
+</html>
