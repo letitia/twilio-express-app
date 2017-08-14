@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const twilio = require('twilio');
 const config = require('./config/config');
 const VoiceResponse = twilio.twiml.VoiceResponse;
+const db = require('./models/index');
 
 const testClient = new twilio(config.twilio.test.accountSid, config.twilio.test.authToken);
 const client = new twilio(config.twilio.live.accountSid, config.twilio.live.authToken);
@@ -23,12 +24,17 @@ app.get('/', (req, res) => {
 
 app.post('/conference', (req, res) => {
   console.log('Posted to /conference!')
+  const Conference = db.conference;
   const phoneNumber = req.body.From;
   const twiml = new VoiceResponse();
   const dial = twiml.dial();
   const friendlyName = `My Conference Room ${Math.ceil(Math.random() * 100)}`;
 
   dial.conference(friendlyName);
+  Conference.create({
+    name: friendlyName,
+    account_sid: req.body.accountSid,
+  });
 
   res.type('text/xml');
   res.send(twiml.toString());

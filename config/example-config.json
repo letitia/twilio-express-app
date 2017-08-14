@@ -1,4 +1,14 @@
 {
+  "db": {
+    "development": {
+      "username": "albert",
+      "password": "123",
+      "database": "",
+      "host": "127.0.0.1",
+      "port": "5432",
+      "dialect": "postgres"
+    }
+  },
   "twilio": {
     "live": {
       "account_sid": "ABC",
