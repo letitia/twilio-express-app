@@ -60,23 +60,6 @@ app.post('/conference/status', (req, res) => {
   res.send('');
 });
 
-app.post('/call', (req, res) => {
-  client.api.calls.create({
-    url: `http:\/\/${req.hostname}/voicemessage`,
-    to: config.phoneNumbers.self,
-    from: config.phoneNumbers.account
-  })
-  .then((call) => console.log(call.sid));
-});
-
-app.post('/voicemessage', (req, res) => {
-  const twiml = new VoiceResponse();
-  twiml.say({ voice: 'alice' }, 'Hi honey. Shall we get pizza now?');
-  twiml.play('http://demo.twilio.com/docs/classic.mp3');
-  res.type('text/xml');
-  res.send(twiml.toString());
-});
-
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
 });
