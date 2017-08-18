@@ -1,13 +1,27 @@
 {
-  "db": {
-    "development": {
-      "username": "albert",
-      "password": "123",
-      "database": "",
-      "host": "127.0.0.1",
-      "port": "5432",
-      "dialect": "postgres"
-    }
+  "development": {
+    "username": "albert",
+    "password": "123",
+    "database": "db_development",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "albert",
+    "password": "123",
+    "database": "db_test",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "albert",
+    "password": "123",
+    "database": "db_prod",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
   },
   "twilio": {
     "live": {
