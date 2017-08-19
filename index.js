@@ -22,14 +22,14 @@ app.get('/', (req, res) => {
   });
 });
 
-app.post('/conference', (req, res) => {
-  console.log('Posted to /conference!')
+app.post('/conferences', (req, res) => {
+  console.log('Posted to /conferences!')
   const twiml = new VoiceResponse();
   const dial = twiml.dial();
   const friendlyName = `My Conference Room ${Math.ceil(Math.random() * 1000)}`;
 
   dial.conference(friendlyName, {
-    statusCallback: '/conference/status',
+    statusCallback: '/twilio/conferences/statuses',
     statusCallbackEvent: 'start end join leave'
   });
 
@@ -37,8 +37,8 @@ app.post('/conference', (req, res) => {
   res.send(twiml.toString());
 });
 
-app.post('/conference/status', (req, res) => {
-  console.log('Posted to /conference/status', req.body.StatusCallbackEvent);
+app.post('/twilio/conferences/statuses', (req, res) => {
+  console.log('Posted to /twilio/conferences/statuses', req.body.StatusCallbackEvent);
   const data = req.body;
   const Conference = db.conference;
 
