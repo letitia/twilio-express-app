@@ -15,11 +15,15 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
   client.conferences.list((err, conferences) => {
-    // conferences.forEach((conference) => {
-    //   console.log(conference)
-    // });
     res.render('index', { conferences });
   });
+});
+
+app.get('/conferences/:id', (req, res) => {
+  const Conference = db.conference;
+  console.log('DEBUGTISH req.params.id', req.params.id);
+  Conference.find({ where: { conferenceSid: req.params.id } })
+    .then(conference => res.render('conference', { conference }));
 });
 
 app.post('/conferences', (req, res) => {
@@ -48,6 +52,26 @@ app.post('/twilio/conferences/statuses', (req, res) => {
       accountSid: data.AccountSid,
       conferenceSid: data.ConferenceSid
     });
+  }
+
+  const createCall = (data) => {
+    return Call.create({
+      sid: data.sid,
+      callerName: data.callerName,
+      from: data.from,
+      to: data.to,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      duration: data.duration,
+      status: data.status,
+      accountSid: data.AccountSid
+    });
+  }
+
+  if (data.StatusCallbackEvent === 'participant-join') {
+    client.calls(data.CallSid)
+      .fetch()
+      .then((call) => createCall(call));
   }
 
   if (data.StatusCallbackEvent === 'conference-start' ||

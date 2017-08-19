@@ -15,7 +15,7 @@
       <% conferences.forEach(function (conference, i) {  %>
         <tr>
           <td><%= i+1 %>.</td>
-          <td><%= conference.friendlyName %></td>
+          <td><a href="conferences/<%= conference.sid %>"><%= conference.friendlyName %></a></td>
           <td><%= conference.sid %></td>
           <td><%= conference.dateCreated %></td>
           <td><%= conference.status %></td>
