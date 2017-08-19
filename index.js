@@ -45,6 +45,7 @@ app.post('/twilio/conferences/statuses', (req, res) => {
   console.log('Posted to /twilio/conferences/statuses', req.body.StatusCallbackEvent);
   const data = req.body;
   const Conference = db.conference;
+  const Call = db.call;
 
   const createConference = (data) => {
     return Conference.create({
@@ -59,12 +60,24 @@ app.post('/twilio/conferences/statuses', (req, res) => {
       sid: data.sid,
       callerName: data.callerName,
       from: data.from,
+      fromFormatted: data.fromFormatted,
       to: data.to,
+      toFormatted: data.toFormatted,
       startTime: data.startTime,
       endTime: data.endTime,
       duration: data.duration,
       status: data.status,
-      accountSid: data.AccountSid
+      accountSid: data.accountSid
+    });
+  }
+
+  const updateCallEnd = (data) => {
+    return Call.update({
+      endTime: data.endTime,
+      duration: data.duration,
+      status: data.status
+    }, {
+      where: { sid: data.sid }
     });
   }
 
@@ -72,6 +85,12 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     client.calls(data.CallSid)
       .fetch()
       .then((call) => createCall(call));
+  }
+
+  if (data.StatusCallbackEvent === 'participant-leave') {
+    client.calls(data.CallSid)
+      .fetch()
+      .then((call) => updateCallEnd(call));
   }
 
   if (data.StatusCallbackEvent === 'conference-start' ||
