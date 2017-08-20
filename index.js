@@ -14,7 +14,11 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
-  client.conferences.list((err, conferences) => {
+  const Conference = db.conference;
+  Conference.findAll({
+    order: [['createdAt', 'DESC']]
+  })
+  .then(conferences => {
     const viewSpec = {
       conferences,
       phoneNumber: config.phoneNumbers.accountFormatted
@@ -26,7 +30,7 @@ app.get('/', (req, res) => {
 app.get('/conferences/:id', (req, res) => {
   const Conference = db.conference;
   const Call = db.call;
-  const conference = Conference.find({ where: { sid: req.params.id } });
+  const conference = Conference.findById(req.params.id);
   const call = Call.findAll({ where: { conferenceSid: req.params.id } });
   Promise.all([conference, call]).then(values => {
     const viewSpec = {
@@ -58,16 +62,16 @@ app.post('/twilio/conferences/statuses', (req, res) => {
   const Conference = db.conference;
   const Call = db.call;
 
-  const createConference = (data) => {
-    return Conference.create({
+  const createConference = (data) => (
+    Conference.create({
       name: data.FriendlyName,
       accountSid: data.AccountSid,
       sid: data.ConferenceSid
-    });
-  }
+    })
+  );
 
-  const createCall = (data) => {
-    return Call.create({
+  const createCall = (data) => (
+    Call.create({
       sid: data.sid,
       callerName: data.callerName,
       from: data.from,
@@ -80,18 +84,18 @@ app.post('/twilio/conferences/statuses', (req, res) => {
       status: data.status,
       accountSid: data.accountSid,
       conferenceSid: reqData.ConferenceSid
-    });
-  }
+    })
+  );
 
-  const updateCallEnd = (data) => {
-    return Call.update({
+  const updateCallEnd = (data) => (
+    Call.update({
       endTime: data.endTime,
       duration: data.duration,
       status: data.status
     }, {
       where: { sid: data.sid }
-    });
-  }
+    })
+  );
 
   if (reqData.StatusCallbackEvent === 'participant-join') {
     client.calls(reqData.CallSid)

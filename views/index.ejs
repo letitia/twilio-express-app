@@ -11,15 +11,13 @@
         <th>Friendly Name</th>
         <th>Conference SID</th>
         <th>Date Created</th>
-        <th>Status</th>
       </tr>
       <% conferences.forEach(function (conference, i) {  %>
         <tr>
           <td><%= i+1 %>.</td>
-          <td><a href="conferences/<%= conference.sid %>"><%= conference.friendlyName %></a></td>
+          <td><a href="conferences/<%= conference.sid %>"><%= conference.name %></a></td>
           <td><%= conference.sid %></td>
-          <td><%= conference.dateCreated %></td>
-          <td><%= conference.status %></td>
+          <td><%= conference.createdAt %></td>
         </tr>
       <% }) %>
   <% } %>
