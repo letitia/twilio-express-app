@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const twilio = require('twilio');
 const VoiceResponse = twilio.twiml.VoiceResponse;
 const db = require('./models/index');
+const port = process.env.PORT || 80;
 
 const testAccountSid = process.env.TWILIO_TEST_ACCOUNT_SID;
 const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
@@ -122,6 +123,6 @@ app.post('/twilio/conferences/statuses', (req, res) => {
   res.send('');
 });
 
-app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
