@@ -3,8 +3,12 @@
 module.exports = {
   up: (queryInterface, Sequelize) =>
     queryInterface.createTable('calls', {
-      sid: Sequelize.STRING,
+      sid: {
+        type: Sequelize.STRING,
+        primaryKey: true
+      },
       callerName: Sequelize.STRING,
+      conferenceSid: Sequelize.STRING,
       accountSid: Sequelize.STRING,
       duration: Sequelize.INTEGER,
       from: Sequelize.STRING,

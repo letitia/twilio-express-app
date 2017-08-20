@@ -15,15 +15,26 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
   client.conferences.list((err, conferences) => {
-    res.render('index', { conferences });
+    const viewSpec = {
+      conferences,
+      phoneNumber: config.phoneNumbers.accountFormatted
+    };
+    res.render('index', viewSpec);
   });
 });
 
 app.get('/conferences/:id', (req, res) => {
   const Conference = db.conference;
-  console.log('DEBUGTISH req.params.id', req.params.id);
-  Conference.find({ where: { conferenceSid: req.params.id } })
-    .then(conference => res.render('conference', { conference }));
+  const Call = db.call;
+  const conference = Conference.find({ where: { sid: req.params.id } });
+  const call = Call.findAll({ where: { conferenceSid: req.params.id } });
+  Promise.all([conference, call]).then(values => {
+    const viewSpec = {
+      conference: values[0],
+      calls: values[1]
+    };
+    res.render('conference', viewSpec);
+  });
 });
 
 app.post('/conferences', (req, res) => {
@@ -43,7 +54,7 @@ app.post('/conferences', (req, res) => {
 
 app.post('/twilio/conferences/statuses', (req, res) => {
   console.log('Posted to /twilio/conferences/statuses', req.body.StatusCallbackEvent);
-  const data = req.body;
+  const reqData = req.body;
   const Conference = db.conference;
   const Call = db.call;
 
@@ -51,7 +62,7 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     return Conference.create({
       name: data.FriendlyName,
       accountSid: data.AccountSid,
-      conferenceSid: data.ConferenceSid
+      sid: data.ConferenceSid
     });
   }
 
@@ -67,7 +78,8 @@ app.post('/twilio/conferences/statuses', (req, res) => {
       endTime: data.endTime,
       duration: data.duration,
       status: data.status,
-      accountSid: data.accountSid
+      accountSid: data.accountSid,
+      conferenceSid: reqData.ConferenceSid
     });
   }
 
@@ -81,22 +93,22 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     });
   }
 
-  if (data.StatusCallbackEvent === 'participant-join') {
-    client.calls(data.CallSid)
+  if (reqData.StatusCallbackEvent === 'participant-join') {
+    client.calls(reqData.CallSid)
       .fetch()
       .then((call) => createCall(call));
   }
 
-  if (data.StatusCallbackEvent === 'participant-leave') {
-    client.calls(data.CallSid)
+  if (reqData.StatusCallbackEvent === 'participant-leave') {
+    client.calls(reqData.CallSid)
       .fetch()
       .then((call) => updateCallEnd(call));
   }
 
-  if (data.StatusCallbackEvent === 'conference-start' ||
-    data.StatusCallbackEvent === 'participant-join' && data.StartConferenceOnEnter === 'true') {
-    createConference(data)
-    .then((result) => res.send(result));
+  if (reqData.StatusCallbackEvent === 'conference-start' ||
+    reqData.StatusCallbackEvent === 'participant-join' && reqData.StartConferenceOnEnter === 'true') {
+    createConference(reqData)
+      .then((result) => res.send(result));
     return;
   }
 

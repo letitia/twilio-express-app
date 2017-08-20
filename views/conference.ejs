@@ -3,7 +3,7 @@
 <table>
   <tr>
     <td><strong>Conference SID</strong></td>
-    <td><%= conference.get('conferenceSid') %></td>
+    <td><%= conference.get('sid') %></td>
   </tr>
     <td><strong>Account SID</strong></td>
     <td><%= conference.get('accountSid') %></td>
@@ -12,3 +12,31 @@
     <td><strong>Created At</strong></td>
     <td><%= conference.get('createdAt') %></td>
   </tr>
+</table>
+
+<h2>Participants</h2>
+
+<% if (calls.length) { %>
+  <table>
+    <tr>
+      <th>Call SID</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Duration</th>
+      <th>Status</th>
+    </tr>
+    <% calls.forEach(function (call) { %>
+      <tr>
+        <td><%= call.sid %></td>
+        <td><%= call.fromFormatted %></td>
+        <td><%= call.toFormatted %></td>
+        <td><%= call.startTime %></td>
+        <td><%= call.endTime %></td>
+        <td><%= call.duration %></td>
+        <td><%= call.status %></td>
+      </tr>
+    <% }) %>
+  </table>
+<% } %>

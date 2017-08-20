@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => (
   sequelize.define('conference', {
-    name: DataTypes.STRING,
-    accountSid: DataTypes.STRING,
-    conferenceSid: {
+    sid: {
       type: DataTypes.STRING,
       primaryKey: true
     },
+    name: DataTypes.STRING,
+    accountSid: DataTypes.STRING,
     recordingSid: DataTypes.STRING,
     recordingUrl: DataTypes.STRING,
     recordingStatus: DataTypes.STRING,

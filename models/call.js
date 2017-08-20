@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => (
       primaryKey: true
     },
     callerName: DataTypes.STRING,
+    conferenceSid: DataTypes.STRING,
     accountSid: DataTypes.STRING,
     duration: DataTypes.INTEGER,
     from: DataTypes.STRING,
