@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "cadence",
+    "password": "Getting started",
+    "database": "twilio_conference",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "cadence",
+    "password": "",
+    "database": "twilio_conference_test",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "cadence",
+    "password": "",
+    "database": "twilio_conference_production",
+    "host": "127.0.0.1",
+    "port": "5432",
+    "dialect": "postgres"
+  }
+}

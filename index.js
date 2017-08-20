@@ -2,12 +2,15 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const twilio = require('twilio');
-const config = require('./config/config');
 const VoiceResponse = twilio.twiml.VoiceResponse;
 const db = require('./models/index');
 
-const testClient = new twilio(config.twilio.test.accountSid, config.twilio.test.authToken);
-const client = new twilio(config.twilio.live.accountSid, config.twilio.live.authToken);
+const testAccountSid = process.env.TWILIO_TEST_ACCOUNT_SID;
+const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const testAuthToken = process.env.TWILIO_TEST_AUTH_TOKEN;
+const liveAuthToken = process.env.TWILIO_AUTH_TOKEN;
+const testClient = new twilio(testAccountSid, testAuthToken);
+const client = new twilio(liveAccountSid, liveAuthToken);
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -21,7 +24,7 @@ app.get('/', (req, res) => {
   .then(conferences => {
     const viewSpec = {
       conferences,
-      phoneNumber: config.phoneNumbers.accountFormatted
+      phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
     };
     res.render('index', viewSpec);
   });
