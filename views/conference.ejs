@@ -1,5 +1,6 @@
-<h1>Conference: <%= conference.get('name') %></h1>
+<h1><%= conference.get('name') %></h1>
 
+<h2>Conference Details</h2>
 <table>
   <tr>
     <td><strong>Conference SID</strong></td>
@@ -24,7 +25,7 @@
       <th>To</th>
       <th>Start Time</th>
       <th>End Time</th>
-      <th>Duration</th>
+      <th>Duration (s)</th>
       <th>Status</th>
     </tr>
     <% calls.forEach(function (call) { %>

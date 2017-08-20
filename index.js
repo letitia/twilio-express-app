@@ -41,7 +41,7 @@ app.post('/conferences', (req, res) => {
   console.log('Posted to /conferences!')
   const twiml = new VoiceResponse();
   const dial = twiml.dial();
-  const friendlyName = `My Conference Room ${Math.ceil(Math.random() * 1000)}`;
+  const friendlyName = 'My Conference Room';
 
   dial.conference(friendlyName, {
     statusCallback: '/twilio/conferences/statuses',
