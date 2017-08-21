@@ -11,6 +11,7 @@
         <th>Friendly Name</th>
         <th>Conference SID</th>
         <th>Date Created</th>
+        <th>Status</th>
       </tr>
       <% conferences.forEach(function (conference, i) {  %>
         <tr>
@@ -18,9 +19,18 @@
           <td><a href="conferences/<%= conference.sid %>"><%= conference.name %></a></td>
           <td><%= conference.sid %></td>
           <td><%= conference.createdAt %></td>
+          <td><%= conference.status %></td>
         </tr>
       <% }) %>
     </table>
   <% } %>
+  <script type='text/javascript'>
+  const hostname = location.origin.replace(/^http/, 'ws');
+  const ws = new WebSocket(hostname);
+  const conferences = <%- JSON.stringify(conferences) %>;
+  ws.onmessage = (event) => {
+    const updatedConference = JSON.parse(event.data);
+  }
+  </script>
 </body>
 </html>

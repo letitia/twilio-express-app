@@ -4,18 +4,21 @@ const bodyParser = require('body-parser');
 const twilio = require('twilio');
 const VoiceResponse = twilio.twiml.VoiceResponse;
 const db = require('./models/index');
-const port = process.env.PORT || 80;
+const PORT = process.env.PORT || 80;
+const SocketServer = require('ws').Server;
 
-const testAccountSid = process.env.TWILIO_TEST_ACCOUNT_SID;
-const testAuthToken = process.env.TWILIO_TEST_AUTH_TOKEN;
-const testClient = new twilio(testAccountSid, testAuthToken);
-const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
-const liveAuthToken = process.env.TWILIO_AUTH_TOKEN;
-const client = new twilio(liveAccountSid, liveAuthToken);
+const server = app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
+
+const wsServer = new SocketServer({ server });
+
+wsServer.on('connection', (ws) => {
+  console.log('Client connected to ws');
+  wsServer.on('close', () => console.log('Client disconnected'));
+});
 
 app.get('/', (req, res) => {
   const Conference = db.conference;
@@ -77,6 +80,13 @@ app.post('/conferences', (req, res) => {
     res.send(twiml.toString());
   });
 });
+
+const testAccountSid = process.env.TWILIO_TEST_ACCOUNT_SID;
+const testAuthToken = process.env.TWILIO_TEST_AUTH_TOKEN;
+const testClient = new twilio(testAccountSid, testAuthToken);
+const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const liveAuthToken = process.env.TWILIO_AUTH_TOKEN;
+const client = new twilio(liveAccountSid, liveAuthToken);
 
 app.post('/twilio/conferences/statuses', (req, res) => {
   console.log('Posted to /twilio/conferences/statuses', req.body.StatusCallbackEvent);
@@ -142,16 +152,18 @@ app.post('/twilio/conferences/statuses', (req, res) => {
 
   if (reqData.StatusCallbackEvent === 'conference-start' ||
     reqData.StatusCallbackEvent === 'participant-join' && reqData.StartConferenceOnEnter === 'true') {
-    createConference(reqData);
+    createConference(reqData)
+      .then((conference) => {
+        wsServer.clients.forEach((client) => client.send(JSON.stringify(conference)));
+      });
   }
 
   if (reqData.StatusCallbackEvent === 'conference-end') {
-    updateConferenceEnd(reqData);
+    updateConferenceEnd(reqData)
+      .then((conference) => {
+        wsServer.clients.forEach((client) => client.send(JSON.stringify(conference)));
+      });
   }
 
   res.send('');
-});
-
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
 });
