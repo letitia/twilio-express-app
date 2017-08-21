@@ -10,6 +10,7 @@ module.exports = {
       },
       name: Sequelize.STRING,
       accountSid: Sequelize.STRING,
+      status: Sequelize.STRING,
       recordingSid: Sequelize.STRING,
       recordingUrl: Sequelize.STRING,
       recordingStatus: Sequelize.STRING,

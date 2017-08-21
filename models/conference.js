@@ -6,10 +6,11 @@ module.exports = (sequelize, DataTypes) => (
     },
     name: DataTypes.STRING,
     accountSid: DataTypes.STRING,
+    status: DataTypes.STRING,
     recordingSid: DataTypes.STRING,
     recordingUrl: DataTypes.STRING,
     recordingStatus: DataTypes.STRING,
     recordingDuration: DataTypes.INTEGER,
-    recordingFileSize: DataTypes.INTEGER,
+    recordingFileSize: DataTypes.INTEGER
   })
 );

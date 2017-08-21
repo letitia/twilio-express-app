@@ -7,10 +7,10 @@ const db = require('./models/index');
 const port = process.env.PORT || 80;
 
 const testAccountSid = process.env.TWILIO_TEST_ACCOUNT_SID;
-const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
 const testAuthToken = process.env.TWILIO_TEST_AUTH_TOKEN;
-const liveAuthToken = process.env.TWILIO_AUTH_TOKEN;
 const testClient = new twilio(testAccountSid, testAuthToken);
+const liveAccountSid = process.env.TWILIO_ACCOUNT_SID;
+const liveAuthToken = process.env.TWILIO_AUTH_TOKEN;
 const client = new twilio(liveAccountSid, liveAuthToken);
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -46,18 +46,36 @@ app.get('/conferences/:id', (req, res) => {
 });
 
 app.post('/conferences', (req, res) => {
-  console.log('Posted to /conferences!')
   const twiml = new VoiceResponse();
   const dial = twiml.dial();
-  const friendlyName = 'My Conference Room';
+  const Conference = db.conference;
+  let friendlyName = 'Conference Room 1';
+  let lastConference;
 
-  dial.conference(friendlyName, {
-    statusCallback: '/twilio/conferences/statuses',
-    statusCallbackEvent: 'start end join leave'
+  Conference.findOne({
+    order: [['createdAt', 'DESC']]
+  })
+  .then((result) => {
+    lastConference = result;
+    if (lastConference) {
+      if (lastConference.get('status') === 'in-progress') {
+        friendlyName = lastConference.get('name');
+      } else {
+        const newNumber = lastConference.get('name').replace(/Conference Room (\d+)/g, (match, num) => parseInt(num)+1);
+        if (!isNaN(parseInt(newNumber))) {
+          friendlyName = `Conference Room ${newNumber}`;
+        }
+      }
+    }
+
+    dial.conference(friendlyName, {
+      statusCallback: '/twilio/conferences/statuses',
+      statusCallbackEvent: 'start end join leave'
+    });
+
+    res.type('text/xml');
+    res.send(twiml.toString());
   });
-
-  res.type('text/xml');
-  res.send(twiml.toString());
 });
 
 app.post('/twilio/conferences/statuses', (req, res) => {
@@ -70,7 +88,16 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     Conference.create({
       name: data.FriendlyName,
       accountSid: data.AccountSid,
-      sid: data.ConferenceSid
+      sid: data.ConferenceSid,
+      status: 'in-progress'
+    })
+  );
+
+  const updateConferenceEnd = (data) => (
+    Conference.update({
+      status: 'completed'
+    }, {
+      where: { sid: data.ConferenceSid }
     })
   );
 
@@ -115,9 +142,11 @@ app.post('/twilio/conferences/statuses', (req, res) => {
 
   if (reqData.StatusCallbackEvent === 'conference-start' ||
     reqData.StatusCallbackEvent === 'participant-join' && reqData.StartConferenceOnEnter === 'true') {
-    createConference(reqData)
-      .then((result) => res.send(result));
-    return;
+    createConference(reqData);
+  }
+
+  if (reqData.StatusCallbackEvent === 'conference-end') {
+    updateConferenceEnd(reqData);
   }
 
   res.send('');
