@@ -1,19 +1,21 @@
 const path = require('path');
 
 module.exports = {
+  devtool: 'source-map',
+
   entry: {
     index: path.resolve('client/entry.jsx')
-  },
-
-  output: {
-    path: path.resolve('dist'),
-    filename: '[name].js'
   },
 
   module: {
     loaders: [{
       test: /\.jsx?/,
-      loader: 'babel-loader'
+      loader: 'babel-loader',
     }]
+  },
+
+  output: {
+    path: path.resolve('dist'),
+    filename: '[name].js'
   }
 };

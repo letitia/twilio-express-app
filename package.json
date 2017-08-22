@@ -5,20 +5,18 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "npm run build -- --watch"
   },
   "author": "Letitia Lew",
   "license": "ISC",
   "dependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
     "body-parser": "^1.17.2",
     "bufferutil": "^3.0.2",
     "ejs": "^2.5.7",
     "express": "^4.15.4",
     "pg": "^7.1.2",
+    "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "sequelize": "^4.4.3",
@@ -26,10 +24,16 @@
     "serve-static": "^1.12.4",
     "twilio": "^3.6.2",
     "utf-8-validate": "^3.0.3",
-    "webpack": "^3.5.5",
     "ws": "^3.1.0"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "nodemon": "^1.11.0",
+    "webpack": "^3.5.5"
   }
 }
