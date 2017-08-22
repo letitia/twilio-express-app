@@ -5,13 +5,16 @@ const twilio = require('twilio');
 const VoiceResponse = twilio.twiml.VoiceResponse;
 const db = require('./models/index');
 const PORT = process.env.PORT || 80;
+const serveStatic = require('serve-static');
 const SocketServer = require('ws').Server;
+const path = require('path');
 
 const server = app.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.set('view engine', 'ejs');
+app.use('/dist', serveStatic(path.resolve('dist')));
 
 const wsServer = new SocketServer({ server });
 
