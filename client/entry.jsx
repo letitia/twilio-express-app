@@ -1,15 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App.jsx';
+import ConferenceList from './ConferenceList.jsx';
 
 function run() {
-  const conference = {
-    name: 'Conference Room 123',
-    sid: 'CF5839722asdf',
-    status: 'completed'
-  };
-
-  const root = <App className="conferenceList" myObj={conference} />;
+  const root = <ConferenceList className="conference-list" />;
   ReactDOM.render(root, document.getElementById('app'));
 }
 

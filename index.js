@@ -24,16 +24,18 @@ wsServer.on('connection', (ws) => {
 });
 
 app.get('/', (req, res) => {
+  const viewSpec = {
+    phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
+  };
+  res.render('index', viewSpec);
   const Conference = db.conference;
   Conference.findAll({
     order: [['createdAt', 'DESC']]
   })
-  .then(conferences => {
-    const viewSpec = {
-      conferences,
-      phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
-    };
-    res.render('index', viewSpec);
+  .then((conferences) => {
+    wsServer.on('connection', (ws) => {
+      wsServer.clients.forEach((client) => client.send(JSON.stringify(conferences)));
+    });
   });
 });
 
@@ -110,7 +112,8 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     Conference.update({
       status: 'completed'
     }, {
-      where: { sid: data.ConferenceSid }
+      where: { sid: data.ConferenceSid },
+      returning: true
     })
   );
 
@@ -157,13 +160,13 @@ app.post('/twilio/conferences/statuses', (req, res) => {
     reqData.StatusCallbackEvent === 'participant-join' && reqData.StartConferenceOnEnter === 'true') {
     createConference(reqData)
       .then((conference) => {
-        wsServer.clients.forEach((client) => client.send(JSON.stringify(conference)));
+        wsServer.clients.forEach((client) => client.send(JSON.stringify([conference])));
       });
   }
 
   if (reqData.StatusCallbackEvent === 'conference-end') {
     updateConferenceEnd(reqData)
-      .then((conference) => {
+      .then(([count, conference]) => {
         wsServer.clients.forEach((client) => client.send(JSON.stringify(conference)));
       });
   }
