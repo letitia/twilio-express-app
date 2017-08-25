@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
   res.render('index', viewSpec);
   const Conference = db.conference;
   Conference.findAll({
-    order: [['createdAt', 'DESC']]
+    order: [['createdAt', 'ASC']]
   })
   .then((conferences) => {
     wsServer.on('connection', (ws) => {

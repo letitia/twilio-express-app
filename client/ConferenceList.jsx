@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 class ConferenceList extends Component {
   constructor() {
@@ -9,15 +10,35 @@ class ConferenceList extends Component {
     };
   }
 
+  updateConferences(updatedData) {
+    updatedData.forEach((updated) => {
+      if (typeof updated !== 'object') return;
+
+      let conferences = this.state.conferences.slice();
+      let index;
+      const existing = conferences.find((conference, i) => {
+          if (conference.sid === updated.sid) {
+            index = i;
+            return conference;
+          }
+        }
+      );
+      if (existing) {
+        if (!_.isEqual(existing, updated)) {
+          conferences[index] = updated;
+        } else return;
+      } else {
+        conferences.unshift(updated);
+      }
+      this.setState({ conferences: conferences });
+    });
+  }
+
   componentDidMount() {
     const hostname = location.origin.replace(/^http/, 'ws');
     const ws = new WebSocket(hostname);
     ws.onmessage = (event) => {
-      const conferenceData = JSON.parse(event.data);
-
-      this.setState({
-        conferences: conferenceData.concat(this.state.conferences)
-      });
+      this.updateConferences(JSON.parse(event.data));
     }
   }
 
@@ -29,7 +50,6 @@ class ConferenceList extends Component {
         <table>
           <thead>
             <tr>
-              <th />
               <th>Friendly Name</th>
               <th>Conference SID</th>
               <th>Date Created</th>
