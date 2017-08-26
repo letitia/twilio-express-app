@@ -4,9 +4,11 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ConferenceIndex from './ConferenceIndex.jsx';
 
 const App = () => (
-  <MuiThemeProvider>
-    <ConferenceIndex />
-  </MuiThemeProvider>
+  <div style={ { display: 'flex', justifyContent: 'center' } }>
+    <MuiThemeProvider>
+      <ConferenceIndex />
+    </MuiThemeProvider>
+  </div>
 );
 
 function run() {
