@@ -1,10 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.jsx';
-import ConferenceList from './ConferenceList.jsx';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import ConferenceIndex from './ConferenceIndex.jsx';
+
+const App = () => (
+  <MuiThemeProvider>
+    <ConferenceIndex />
+  </MuiThemeProvider>
+);
 
 function run() {
-  const root = <ConferenceList className="conference-list" />;
+  const root = <App />;
   ReactDOM.render(root, document.getElementById('app'));
 }
 
