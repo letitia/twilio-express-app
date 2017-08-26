@@ -20,6 +20,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "semantic-ui-react": "^0.71.5",
     "sequelize": "^4.4.3",
     "sequelize-cli": "^2.8.0",
     "serve-static": "^1.12.4",
