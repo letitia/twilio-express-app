@@ -4,9 +4,11 @@ import ConferenceDetail from './components/ConferenceDetail.jsx';
 import ConferenceParticipantList from './components/ConferenceParticipantList.jsx';
 
 const App = () => (
-  <div>
-    <ConferenceDetail />
-    <ConferenceParticipantList />
+  <div style={ { display: 'flex', justifyContent: 'center' } }>
+    <MuiThemeProvider>
+      <ConferenceDetail />
+      <ConferenceParticipantList />
+    </MuiThemeProvider>
   </div>
 );
 

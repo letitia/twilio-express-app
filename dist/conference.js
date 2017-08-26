@@ -31901,9 +31901,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var App = function App() {
   return _react2.default.createElement(
     'div',
-    null,
-    _react2.default.createElement(_ConferenceDetail2.default, null),
-    _react2.default.createElement(_ConferenceParticipantList2.default, null)
+    { style: { display: 'flex', justifyContent: 'center' } },
+    _react2.default.createElement(
+      MuiThemeProvider,
+      null,
+      _react2.default.createElement(_ConferenceDetail2.default, null),
+      _react2.default.createElement(_ConferenceParticipantList2.default, null)
+    )
   );
 };
 
