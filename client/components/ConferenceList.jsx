@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CircularProgress from 'material-ui/CircularProgress';
 import _ from 'lodash';
 
 class ConferenceList extends Component {
@@ -45,30 +46,40 @@ class ConferenceList extends Component {
   render() {
     const { conferences } = this.state;
 
-    return (
-      <div>
-        <table>
-          <thead>
-            <tr>
-              <th>Friendly Name</th>
-              <th>Conference SID</th>
-              <th>Date Created</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            { conferences.map((conference) => (
-              <tr key={ conference.sid }>
-                <td><a href={`conferences/${conference.sid}`}>{ conference.name }</a></td>
-                <td>{ conference.sid }</td>
-                <td>{ conference.createdAt }</td>
-                <td>{ conference.status }</td>
+    if (conferences) {
+      return (
+        <div>
+          <table>
+            <thead>
+              <tr>
+                <th>Friendly Name</th>
+                <th>Conference SID</th>
+                <th>Date Created</th>
+                <th>Status</th>
               </tr>
-            )) }
-          </tbody>
-        </table>
-      </div>
-    );
+            </thead>
+            <tbody>
+              { conferences.map((conference) => (
+                <tr key={ conference.sid }>
+                  <td><a href={`conferences/${conference.sid}`}>{ conference.name }</a></td>
+                  <td>{ conference.sid }</td>
+                  <td>{ conference.createdAt }</td>
+                  <td>{ conference.status }</td>
+                </tr>
+              )) }
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+    else {
+      return (
+        <div style={ { margin: '150px', textAlign: 'center' } }>
+          <CircularProgress size={250} thickness={5} />
+        </div>
+      );
+    }
+
   }
 }
 
