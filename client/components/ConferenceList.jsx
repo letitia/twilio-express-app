@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CircularProgress from 'material-ui/CircularProgress';
+import Table, { TableBody, TableHeader, TableRow, TableHeaderColumn, TableRowColumn } from 'material-ui/Table';
 import _ from 'lodash';
 
 class ConferenceList extends Component {
@@ -49,26 +50,26 @@ class ConferenceList extends Component {
     if (conferences) {
       return (
         <div>
-          <table>
-            <thead>
-              <tr>
-                <th>Friendly Name</th>
-                <th>Conference SID</th>
-                <th>Date Created</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table>
+            <TableHeader displaySelectAll={ false } adjustForCheckbox={ false }>
+              <TableRow>
+                <TableHeaderColumn>Friendly Name</TableHeaderColumn>
+                <TableHeaderColumn>Conference SID</TableHeaderColumn>
+                <TableHeaderColumn>Date Created</TableHeaderColumn>
+                <TableHeaderColumn>Status</TableHeaderColumn>
+              </TableRow>
+            </TableHeader>
+            <TableBody displayRowCheckbox={ false }>
               { conferences.map((conference) => (
-                <tr key={ conference.sid }>
-                  <td><a href={`conferences/${conference.sid}`}>{ conference.name }</a></td>
-                  <td>{ conference.sid }</td>
-                  <td>{ conference.createdAt }</td>
-                  <td>{ conference.status }</td>
-                </tr>
+                <TableRow key={ conference.sid }>
+                  <TableRowColumn><a href={`conferences/${conference.sid}`}>{ conference.name }</a></TableRowColumn>
+                  <TableRowColumn>{ conference.sid }</TableRowColumn>
+                  <TableRowColumn>{ conference.createdAt }</TableRowColumn>
+                  <TableRowColumn>{ conference.status }</TableRowColumn>
+                </TableRow>
               )) }
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       );
     }
