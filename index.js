@@ -23,35 +23,41 @@ wsServer.on('connection', (ws) => {
   wsServer.on('close', () => console.log('Client disconnected'));
 });
 
-app.get('/', (req, res) => {
-  const viewSpec = {
-    phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
-  };
-  res.render('index', viewSpec);
-  const Conference = db.conference;
-  Conference.findAll({
-    order: [['createdAt', 'ASC']]
-  })
-  .then((conferences) => {
-    wsServer.on('connection', (ws) => {
-      wsServer.clients.forEach((client) => client.send(JSON.stringify(conferences)));
-    });
-  });
+app.get('*', (req, res) => {
+  const innerContent = renderToString(<App pathname={req.url} />);
+  const html = renderToStaticMarkup(<Html innerContent={innerContent} />);
+  res.send(`<!DOCTYPE html>${html}`);
 });
 
-app.get('/conferences/:id', (req, res) => {
-  const Conference = db.conference;
-  const Call = db.call;
-  const conference = Conference.findById(req.params.id);
-  const call = Call.findAll({ where: { conferenceSid: req.params.id } });
-  Promise.all([conference, call]).then(values => {
-    const viewSpec = {
-      conference: values[0],
-      calls: values[1]
-    };
-    res.render('conference', viewSpec);
-  });
-});
+// app.get('/', (req, res) => {
+//   const viewSpec = {
+//     phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
+//   };
+//   res.render('index', viewSpec);
+//   const Conference = db.conference;
+//   Conference.findAll({
+//     order: [['createdAt', 'ASC']]
+//   })
+//   .then((conferences) => {
+//     wsServer.on('connection', (ws) => {
+//       wsServer.clients.forEach((client) => client.send(JSON.stringify(conferences)));
+//     });
+//   });
+// });
+
+// app.get('/conferences/:id', (req, res) => {
+//   const Conference = db.conference;
+//   const Call = db.call;
+//   const conference = Conference.findById(req.params.id);
+//   const call = Call.findAll({ where: { conferenceSid: req.params.id } });
+//   Promise.all([conference, call]).then(values => {
+//     const viewSpec = {
+//       conference: values[0],
+//       calls: values[1]
+//     };
+//     res.render('conference', viewSpec);
+//   });
+// });
 
 app.post('/conferences', (req, res) => {
   const twiml = new VoiceResponse();

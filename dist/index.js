@@ -13880,30 +13880,14 @@ var _reactDom = __webpack_require__(39);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _MuiThemeProvider = __webpack_require__(287);
+var _App = __webpack_require__(481);
 
-var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
-
-var _ConferenceIndex = __webpack_require__(368);
-
-var _ConferenceIndex2 = _interopRequireDefault(_ConferenceIndex);
+var _App2 = _interopRequireDefault(_App);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var App = function App() {
-  return _react2.default.createElement(
-    'div',
-    { style: { display: 'flex', justifyContent: 'center' } },
-    _react2.default.createElement(
-      _MuiThemeProvider2.default,
-      null,
-      _react2.default.createElement(_ConferenceIndex2.default, null)
-    )
-  );
-};
-
 function run() {
-  var root = _react2.default.createElement(App, null);
+  var root = _react2.default.createElement(_App2.default, null);
   _reactDom2.default.render(root, document.getElementById('app'));
 }
 
@@ -39803,6 +39787,90 @@ TableRow.propTypes = process.env.NODE_ENV !== "production" ? {
 } : {};
 exports.default = TableRow;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 480 */,
+/* 481 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(3);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(5);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _MuiThemeProvider = __webpack_require__(287);
+
+var _MuiThemeProvider2 = _interopRequireDefault(_MuiThemeProvider);
+
+var _ConferenceIndex = __webpack_require__(368);
+
+var _ConferenceIndex2 = _interopRequireDefault(_ConferenceIndex);
+
+var _ConferenceDetail = __webpack_require__(482);
+
+var _ConferenceDetail2 = _interopRequireDefault(_ConferenceDetail);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var PAGES = {
+  '/': 'ConferenceIndex',
+  '/conferences/:sid': 'Conference'
+};
+
+var App = function (_Component) {
+  _inherits(App, _Component);
+
+  function App() {
+    _classCallCheck(this, App);
+
+    return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+  }
+
+  _createClass(App, [{
+    key: 'render',
+    value: function render() {
+      var Handler = PAGES[this.prop.pathname];
+
+      return _react2.default.createElement(
+        'h1',
+        remainingProps,
+        'Hello, Adele!'
+      );
+    }
+  }]);
+
+  return App;
+}(_react.Component);
+
+App.propTypes = {
+  pathname: _propTypes2.default.oneOf(Object.keys(PAGES)).isRequired
+};
+exports.default = App;
+
+/***/ }),
+/* 482 */
+/***/ (function(module, exports) {
+
+"use strict";
+throw new Error("Module build failed: SyntaxError: Unterminated JSX contents (5:15)\n\n\u001b[0m \u001b[90m 3 | \u001b[39m\u001b[36mclass\u001b[39m \u001b[33mConference\u001b[39m \u001b[36mextends\u001b[39m \u001b[33mComponent\u001b[39m {\n \u001b[90m 4 | \u001b[39m  render() {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 5 | \u001b[39m    \u001b[36mreturn\u001b[39m \u001b[33m<\u001b[39m\u001b[33mh1\u001b[39m\u001b[33m>\u001b[39m\u001b[33m;\u001b[39m\n \u001b[90m   | \u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 6 | \u001b[39m  }\n \u001b[90m 7 | \u001b[39m}\n \u001b[90m 8 | \u001b[39m\u001b[0m\n");
 
 /***/ })
 /******/ ]);
