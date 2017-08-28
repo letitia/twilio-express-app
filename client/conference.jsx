@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ConferenceDetail from './components/ConferenceDetail.jsx';
 import ConferenceParticipantList from './components/ConferenceParticipantList.jsx';
 
 const App = () => (
-  <div style={ { display: 'flex', justifyContent: 'center' } }>
-    <MuiThemeProvider>
+  <MuiThemeProvider>
+    <div>
       <ConferenceDetail />
       <ConferenceParticipantList />
-    </MuiThemeProvider>
-  </div>
+    </div>
+  </MuiThemeProvider>
 );
 
 function run() {
