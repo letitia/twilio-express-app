@@ -4,7 +4,8 @@ module.exports = {
   devtool: 'source-map',
 
   entry: {
-    index: path.resolve('client/entry.jsx')
+    index: path.resolve('client/index.jsx'),
+    conference: path.resolve('client/conference.jsx')
   },
 
   module: {

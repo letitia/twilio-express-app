@@ -37,9 +37,9 @@ class ConferenceList extends Component {
   componentDidMount() {
     const hostname = location.origin.replace(/^http/, 'ws');
     const ws = new WebSocket(hostname);
-    ws.onmessage = (event) => {
+    ws.addEventListener('message', (event) => {
       this.updateConferences(JSON.parse(event.data));
-    }
+    });
   }
 
   render() {

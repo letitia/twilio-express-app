@@ -17,6 +17,7 @@ app.set('view engine', 'ejs');
 app.use('/dist', serveStatic(path.resolve('dist')));
 
 const wsServer = new SocketServer({ server });
+const wsClients = {};
 
 wsServer.on('connection', (ws) => {
   console.log('Client connected to ws');
@@ -24,10 +25,7 @@ wsServer.on('connection', (ws) => {
 });
 
 app.get('/', (req, res) => {
-  const viewSpec = {
-    phoneNumber: process.env.TWILIO_ACCOUNT_PHONE_NUMBER
-  };
-  res.render('index', viewSpec);
+  res.render('index');
   const Conference = db.conference;
   Conference.findAll({
     order: [['createdAt', 'ASC']]
@@ -40,17 +38,27 @@ app.get('/', (req, res) => {
 });
 
 app.get('/conferences/:id', (req, res) => {
+  res.render('conference');
   const Conference = db.conference;
   const Call = db.call;
-  const conference = Conference.findById(req.params.id);
-  const call = Call.findAll({ where: { conferenceSid: req.params.id } });
-  Promise.all([conference, call]).then(values => {
-    const viewSpec = {
-      conference: values[0],
-      calls: values[1]
-    };
-    res.render('conference', viewSpec);
+  Conference.findById(req.params.id)
+  .then((conference) => {
+    wsServer.on('connection', (ws) => {
+      wsServer.clients.forEach((client) => client.send(JSON.stringify(conference)));
+    });
   });
+  Call.findAll({ where: { conferenceSid: req.params.id } })
+  .then((calls) => {
+    wsServer.on('connection', (ws) => {
+      wsServer.clients.forEach((client) => client.send(JSON.stringify(calls)));
+    });
+  });
+  // Promise.all([conference, call]).then(values => {
+  //   const viewSpec = {
+  //     conference: values[0],
+  //     calls: values[1]
+  //   };
+  // });
 });
 
 app.post('/conferences', (req, res) => {
